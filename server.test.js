@@ -14,11 +14,21 @@ describe('the route handlers', () => {
       expect(response.type).toMatch(/json/i);
     });
     test('always responds with an array, even if there are no games', async () => {
+      db.data = [];
       const response = await request(server).get('/games');
       const rows = await expect(response.body).toEqual([]);
     });
   });
   describe('POST /games', () => {
+    afterEach(() => {
+      db.data = [
+        {
+          title: 'Pacman',
+          genre: 'Arcade',
+          releaseYear: 1980
+        }
+      ];
+    });
     test('responds with a 201 status', async () => {
       const body = {
         title: 'Red Dead Redemption 2',
